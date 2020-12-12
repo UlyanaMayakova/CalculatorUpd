@@ -1,16 +1,15 @@
 package com.example.calculator2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,29 +27,37 @@ public class MainActivity extends AppCompatActivity {
     private TextView input;
     private Button delete;
     private Button plusMinus;
-    private Button percent;
-    private Button divide;
-    private Button multiply;
-    private Button minus;
-    private Button plus;
-    private Button equal;
-    private Double inputDouble = null;
-    private Double number;
-    private Double result = null;
+    private Double inputDouble;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         inIt();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.settings) {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        }
+        return true;
     }
 
     private void inIt() {
 
         input = findViewById(R.id.result);
-//        final List<Double> information = new ArrayList<>();
-//        final Scanner scanner = new Scanner(System.in);
 
         dot = findViewById(R.id.dot_btn);
 
@@ -166,63 +173,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 inputDouble = Double.parseDouble(input.getText().toString());
-                double convertedInput = - inputDouble;
+                double convertedInput = -inputDouble;
                 input.setText("" + convertedInput);
             }
         });
-
-        percent = findViewById(R.id.percent_btn);
-
-        divide = findViewById(R.id.divide_btn);
-
-//        divide.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                inputDouble = Double.parseDouble(input.getText().toString());
-//                information.add(inputDouble);
-//                input.setText("");
-//                Double secondInput = Double.valueOf(scanner.next());
-//                Double secondInput = Double.parseDouble(input.getText().toString());
-//                Double firstInput = information.get(information.size()-1);
-//                input.setText("" + (firstInput / secondInput));
-//
-//                inputDouble = Double.parseDouble(input.getText().toString());
-//                input.setText("");
-//                number = Double.parseDouble(input.getText().toString());
-//                if (inputDouble == null) {
-//                    inputDouble = number;
-//                } else if(number == 0) {
-//                    inputDouble = 0.0;
-//                } else {
-//                    result = inputDouble / number;
-//                }
-//            }
-//        });
-
-        multiply = findViewById(R.id.multiply_btn);
-
-        multiply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                inputDouble = Double.parseDouble(input.getText().toString());
-                input.setText("");
-                number = Double.parseDouble(input.getText().toString());
-                result = inputDouble * number;
-            }
-        });
-
-        plus = findViewById(R.id.plus_btn);
-
-        minus = findViewById(R.id.minus_btn);
-
-        equal = findViewById(R.id.equal_btn);
-
-        equal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                input.setText(result.toString());
-            }
-        });
-
     }
 }
