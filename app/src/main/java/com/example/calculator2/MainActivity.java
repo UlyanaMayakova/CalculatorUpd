@@ -1,15 +1,21 @@
 package com.example.calculator2;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private Button delete;
     private Button plusMinus;
     private Double inputDouble;
+    private static final int SETTINGS_REQUEST_CODE = 37;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +58,25 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, SETTINGS_REQUEST_CODE);
         }
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == SETTINGS_REQUEST_CODE && data != null
+                && data.hasExtra(SettingsActivity.IMAGE_FILE_RESULT_KEY)) {
+            File imageFile = (File) data.getSerializableExtra(SettingsActivity.IMAGE_FILE_RESULT_KEY);
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            imageView.setImageBitmap(bitmap);
+        }
+    }
+
     private void inIt() {
+
+        imageView = findViewById(R.id.image);
 
         input = findViewById(R.id.result);
 
